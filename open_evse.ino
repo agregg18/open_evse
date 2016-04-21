@@ -21,6 +21,7 @@
  10/25/14      Craig K         add smoothing to the Amperage readout
  3/1/15        Craig K         add TEMPERATURE_MONITORING
  3/7/15        Craig K         add KWH_RECORDING
+ 3/29/16        Andrew G       add TODPRICE
   
  * This file is part of Open EVSE.
 
@@ -181,6 +182,9 @@ uint8_t sec = 0;
 #endif // DELAYTIMER_MENU
 #endif // DELAYTIMER
 
+#ifdef TODPRICE
+ToD g_ToD;
+#endif //TODPRICE
 
 #ifdef TEMPERATURE_MONITORING
 TempMonitor g_TempMonitor;
@@ -2092,6 +2096,15 @@ void BtnHandler::ChkBtn()
 }
 #endif // BTN_MENU
 
+//ToD Pricing - Andrew Gregg
+#ifdef TODPRICE
+
+void ToD::SetLCD(){
+  g_OBD.LcdSetBacklightColor(TOD_COLORS[m_Price]);
+}
+
+#endif // TODPRICE
+
 // Start Delay Timer Functions - GoldServe
 #ifdef DELAYTIMER
 void DelayTimer::Init() {
@@ -2295,4 +2308,8 @@ void loop()
 #ifdef DELAYTIMER
   g_DelayTimer.CheckTime();
 #endif //#ifdef DELAYTIMER
+
+#ifdef TODPRICE
+  g_ToD.SetLCD();
+#endif // TODPRICE
 }
